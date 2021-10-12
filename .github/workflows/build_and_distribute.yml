@@ -1,12 +1,26 @@
+# This is a basic workflow to help you get started with Actions
 name: Build and Distribute
-# view full tutorial here: https://medium.com/flutterdevs/automation-flutter-with-github-actions-firebase-app-distribution-bd7193f0e0e8
 
-# Github Actions will execute the workflow following the events under the key.
+# Controls when the workflow will run
 on:
+  # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# jobs:
+#   pass-secret-to-action:
+#     runs-on: ubuntu-latest
+
+#     steps:  
+#       - name: Pass the received secret to an action
+#         uses: ./.github/actions/my-action@v1
+#         with:
+#           token: ${{ secrets.access-token }}          
 
 # A workflow run is comprised of at least one job.
 jobs:
@@ -43,23 +57,15 @@ jobs:
     - run: flutter build apk
       
     # Upload generated apk to the artifacts.
-      uses: actions/upload-artifact@master
+    - uses: actions/upload-artifact@master
       with:
         name: apk-release
         path: build/app/outputs/bundle/release/app-release.apk
 
-# name: Firebase App Distribution
-
-# # Github Actions will execute the workflow following the events under the key.
-# on:
-#   push:
-#     branches: [ main ]
-#   pull_request:
-#     branches: [ main ]
-
-# uses: wzieba/Firebase-Distribution-Github-Action@v1.2.1
-# with:
-#   appId: ${{secrets.FIREBASE_APP_ID}}
-#   token: ${{secrets.FIREBASE_TOKEN}}
-#   groups: testers
-#   file: app/build/outputs/apk/release/app-release-unsigned.apk
+    - name: Firebase App Distribution
+      uses: wzieba/Firebase-Distribution-Github-Action@v1.2.1
+      with:
+        appId: ${{secrets.FIREBASE_APP_ID}}
+        token: ${{secrets.FIREBASE_TOKEN}}
+        groups: testers
+        file: app/build/outputs/apk/release/app-release.apk
