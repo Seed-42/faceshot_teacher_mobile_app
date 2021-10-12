@@ -1,4 +1,5 @@
 name: Build and Distribute
+# view full tutorial here: https://medium.com/flutterdevs/automation-flutter-with-github-actions-firebase-app-distribution-bd7193f0e0e8
 
 # Github Actions will execute the workflow following the events under the key.
 on:
@@ -23,8 +24,8 @@ jobs:
         with:
           java-version: '12.x'
       - uses: subosito/flutter-action@v1
-          with:
-            channel: 'stable'
+        with:
+          channel: 'stable'
 
       # Get flutter dependencies.
       - run: flutter pub get
@@ -46,3 +47,18 @@ jobs:
         with:
           name: apk-release
           path: build/app/outputs/bundle/release/app-release.apk
+# name: Firebase App Distribution
+
+# # Github Actions will execute the workflow following the events under the key.
+# on:
+#   push:
+#     branches: [ main ]
+#   pull_request:
+#     branches: [ main ]
+
+# uses: wzieba/Firebase-Distribution-Github-Action@v1.2.1
+# with:
+#   appId: ${{secrets.FIREBASE_APP_ID}}
+#   token: ${{secrets.FIREBASE_TOKEN}}
+#   groups: testers
+#   file: app/build/outputs/apk/release/app-release-unsigned.apk
