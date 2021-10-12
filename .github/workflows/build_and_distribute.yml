@@ -31,7 +31,7 @@ jobs:
 
     # Set up the Flutter environment for Github Actions.
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
 
     # Note: This workflow uses the latest stable version of the Flutter SDK.
     - uses: actions/setup-java@v1
@@ -60,7 +60,7 @@ jobs:
     - uses: actions/upload-artifact@master
       with:
         name: apk-release
-        path: build/app/outputs/bundle/release/app-release.apk
+        path: build/app/outputs/bundle/release
 
     - name: Firebase App Distribution
       uses: wzieba/Firebase-Distribution-Github-Action@v1.2.1
@@ -68,4 +68,4 @@ jobs:
         appId: ${{secrets.FIREBASE_FACESHOT_TEACHER_APPID}}
         token: ${{secrets.FIREBASE_TOKEN}}
         groups: testers
-        file: app/build/outputs/apk/release/app-release.apk
+        file: build/app/outputs/apk/release/app-release.apk
