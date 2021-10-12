@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "673461305828",
+    "project_id": "faceshot-seed-42",
+    "storage_bucket": "faceshot-seed-42.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:673461305828:android:2cc6dec2abb07b8e3347f1",
+        "android_client_info": {
+          "package_name": "com.example.faceshot_teacher"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "673461305828-dq2q7fq3jtuo6tqm2hecfloodhpkpijt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.faceshot_teacher",
+            "certificate_hash": "40cd5d83cb0a7897697827ce1dcbfe8c21b4756a"
+          }
+        },
+        {
+          "client_id": "673461305828-9dhke33bnsoakt3kdfll9906jnhabgtd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaRX1GesIzb4Y4GK5ZOdFvsTPS1QX1zvg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "673461305828-9dhke33bnsoakt3kdfll9906jnhabgtd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
