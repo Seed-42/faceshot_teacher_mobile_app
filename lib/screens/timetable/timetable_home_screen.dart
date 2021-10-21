@@ -31,13 +31,13 @@ class _TimeTableHomeScreenState extends State<TimeTableHomeScreen> {
       weekDay = 'Monday';
     } else if (index == 1) {
       weekDay = 'Tuesday';
-    } else if (index == 1) {
+    } else if (index == 2) {
       weekDay = 'Wednesday';
-    } else if (index == 1) {
+    } else if (index == 3) {
       weekDay = 'Thursday';
-    } else if (index == 1) {
+    } else if (index == 4) {
       weekDay = 'Friday';
-    } else if (index == 1) {
+    } else if (index == 5) {
       weekDay = 'Saturdayday';
     } else {
       weekDay = 'Sunday';

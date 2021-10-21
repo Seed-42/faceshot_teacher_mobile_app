@@ -7,7 +7,7 @@ import 'package:faceshot_teacher/widgets/form_fields/text_form_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../home_screen.dart';
+import '../home/home_screen.dart';
 import 'login_screen.dart';
 
 class SignupScreen extends StatefulWidget {

@@ -53,6 +53,7 @@ class FirestoreService {
       return null;
     }
   }
+
   /// Sets the Timetable from the [timeTableUid]
   static Future setTimeTable(Timetable timeTable) async {
     //Get the user profile data

@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'authentication/login_screen.dart';
-import 'home_screen.dart';
+import 'home/home_screen.dart';
 import 'splash_screen.dart';
 
 class FaceShotApp extends StatelessWidget {
