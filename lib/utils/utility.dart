@@ -39,7 +39,7 @@ class Utility {
           title: Text(title),
           content: Text(body),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: const Text('Close'),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -70,11 +70,11 @@ class Utility {
           title: Text(title),
           content: Text(body),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               onPressed: () => Navigator.of(context).pop(false),
               child: const Text('No'),
             ),
-            FlatButton(
+            TextButton(
               onPressed: () => Navigator.of(context).pop(true),
               child: const Text('Yes'),
             ),
@@ -102,15 +102,13 @@ class Utility {
               textInputAction: TextInputAction.go,
             ),
             actions: <Widget>[
-              FlatButton(
-                textColor: Theme.of(context).textTheme.bodyText1?.color,
+              TextButton(
                 child: const Text('Cancel'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
-              FlatButton(
-                textColor: Theme.of(context).primaryColor,
+              TextButton(
                 child: const Text('Submit'),
                 onPressed: () {
                   Navigator.of(context).pop(_textFieldController.text);
@@ -137,7 +135,7 @@ class Utility {
               children: [
                 CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(
-                    Theme.of(context).accentColor,
+                    Theme.of(context).primaryColor,
                   ),
                 ),
                 const Padding(
