@@ -1,9 +1,16 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:faceshot_teacher/models/attendance.dart';
 import 'package:faceshot_teacher/models/student.dart';
 import 'package:faceshot_teacher/models/teacher.dart';
 import 'package:faceshot_teacher/models/timetable.dart';
 import 'package:faceshot_teacher/services/firebase_firestore_service.dart';
+import 'package:faceshot_teacher/widgets/square_painter.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:ui' as ui;
+import 'dart:async';
 
 class AttendanceScreen extends StatefulWidget {
   final Teacher teacher;
@@ -51,6 +58,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             itemCount: snapshot.data?.length,
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
+                leading: snapshot.data![index].coordinates != null
+                    ? Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: _getDetectedFaceImage(
+                          snapshot.data![index].coordinates,
+                        ),
+                      )
+                    : const SizedBox(),
                 title: getStudentNameText(snapshot.data![index].studentUid),
                 subtitle: Text(
                   'Marked ' +
@@ -82,6 +97,67 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         },
       ),
     );
+  }
+
+  // Get the detected photo
+  FutureBuilder _getDetectedFaceImage(Coordinates? coordinates) {
+    return FutureBuilder<ui.Image>(
+      future: _getClassAttendanceImage(),
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<ui.Image> snapshot,
+      ) {
+        if (snapshot.data == null) {
+          return const SizedBox();
+        }
+
+        //Load picture
+        if (coordinates != null) {
+          return FittedBox(
+            child: SizedBox(
+              width: 500,
+              height: 500,
+              child: CustomPaint(
+                painter: SquarePainter(
+                  snapshot.data!,
+                  //left
+                  coordinates.topLeft.first * 0.0,
+                  //top
+                  coordinates.topLeft.last + 0.0,
+                  //width
+                  coordinates.bottomRight.first -
+                      coordinates.bottomLeft.first +
+                      0.0,
+                  //height
+                  coordinates.bottomRight.last -
+                      coordinates.topRight.last +
+                      0.0,
+                ),
+              ),
+            ),
+          );
+        } else {
+          return const SizedBox();
+        }
+      },
+    );
+  }
+
+  Future<ui.Image> _getClassAttendanceImage() async {
+    final Directory appDocDir = await getApplicationDocumentsDirectory();
+    final fileAttendanceFinalImage =
+        File('${appDocDir.path}/${widget.attendanceUid}.jpg');
+
+    return await loadImage(
+        Uint8List.view(fileAttendanceFinalImage.readAsBytesSync().buffer));
+  }
+
+  Future<ui.Image> loadImage(Uint8List bytes) async {
+    final Completer<ui.Image> completer = Completer();
+    ui.decodeImageFromList(bytes, (ui.Image img) {
+      return completer.complete(img);
+    });
+    return completer.future;
   }
 
   Future<List<Attendance>> _loadAttendanceItems() async {

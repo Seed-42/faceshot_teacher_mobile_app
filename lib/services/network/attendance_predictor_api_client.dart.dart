@@ -28,9 +28,9 @@ class AttendancePredictorApiClient {
         "attendance_confidence": 0.96,
         "student_detected_face_coordinates": {
           'topleft': [50, 50],
-          'topright': [500, 50],
-          'bottomright': [500, 500],
-          'bottomleft': [50, 500]
+          'topright': [100, 50],
+          'bottomright': [100, 100],
+          'bottomleft': [50, 100]
         }
       },
       {
