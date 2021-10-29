@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faceshot_teacher/models/attendance.dart';
 import 'package:faceshot_teacher/models/teacher.dart';
 import 'package:faceshot_teacher/models/timetable.dart';
@@ -125,8 +124,8 @@ class _CameraScreenState extends State<CameraScreen> {
     try {
       XFile file = await cameraController.takePicture();
       return file;
-    } on CameraException catch (e) {
-      print(e);
+    } on CameraException catch (_) {
+      //print(e);
       return null;
     }
   }
@@ -148,7 +147,7 @@ class _CameraScreenState extends State<CameraScreen> {
             'Attendances/${widget.timetable.uid}/${fileAttendanceFinalImage.uri.pathSegments.last}')
         .putFile(fileAttendanceFinalImage);
     if (snapshot.state == TaskState.success) {
-      final String downloadUrl = await snapshot.ref.getDownloadURL();
+      //final String downloadUrl = await snapshot.ref.getDownloadURL();
     } else {
       Utility.showSnackBar(
         context,

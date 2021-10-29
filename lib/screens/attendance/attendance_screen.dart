@@ -38,7 +38,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             itemCount: snapshot.data?.length,
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
-                title: Text('${snapshot.data![index].studentUid}'),
+                title: Text(snapshot.data![index].studentUid),
                 subtitle: Text(
                   'Marked ' +
                       (snapshot.data![index].confidence > 0.9

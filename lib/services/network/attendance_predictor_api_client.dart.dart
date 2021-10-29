@@ -1,8 +1,8 @@
-import 'dart:convert';
+// import 'dart:convert';
 
 import 'package:faceshot_teacher/models/attendance.dart';
-import 'package:faceshot_teacher/utils/const.dart';
-import 'package:http/http.dart' as http_client;
+// import 'package:faceshot_teacher/utils/const.dart';
+// import 'package:http/http.dart' as http_client;
 
 ///Class for handling all the API calls to Attendance Predictor APIS
 class AttendancePredictorApiClient {
@@ -10,7 +10,7 @@ class AttendancePredictorApiClient {
   static Future<List<Attendance>> getAttendancePrediction(
       String classImage) async {
     //Prepare the url
-    String url = '${Const.apiBaseUrl}/get_prediction';
+    //String url = '${Const.apiBaseUrl}/get_prediction';
 
     //Send the request
     // final http_client.Response response = await http_client.get(
@@ -45,13 +45,10 @@ class AttendancePredictorApiClient {
       },
     ];
 
-    returnedAttendance.forEach((attendanceData) {
+    for (var attendanceData in returnedAttendance) {
       markedAttendances.add(Attendance.fromJson(attendanceData));
-    });
+    }
 
     return markedAttendances;
-    // } else {
-    //   return [];
-    // }
   }
 }
