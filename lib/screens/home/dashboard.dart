@@ -1,5 +1,6 @@
 import 'package:faceshot_teacher/models/teacher.dart';
 import 'package:faceshot_teacher/models/timetable.dart';
+import 'package:faceshot_teacher/screens/attendance/camera_screen.dart';
 import 'package:faceshot_teacher/screens/timetable/timetable_home_screen.dart';
 import 'package:faceshot_teacher/services/firebase_firestore_service.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,6 @@ class _HomeScreeenDashboardState extends State<HomeScreeenDashboard> {
         builder: (BuildContext context, AsyncSnapshot<Timetable?> snapshot) {
           bool isTimeTableAdded = true;
           bool isClassestoday = true;
-
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.data == null ||
@@ -45,29 +45,49 @@ class _HomeScreeenDashboardState extends State<HomeScreeenDashboard> {
                 theme,
                 isTimeTableAdded,
                 isClassestoday,
-                todaysAgenda!,
+                todaysAgenda ?? [],
               ),
 
               //Timetable
-              isTimeTableAdded && isClassestoday
-                  ? Card(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Attendance',
-                              style: theme.textTheme.headline5,
-                              textAlign: TextAlign.left,
+              isTimeTableAdded &&
+                      isClassestoday &&
+                      _getCurrentTimeSlotFromTimeTable(snapshot.data!) != null
+                  ? InkWell(
+                      onTap: () async {
+                        //Go to the TimeTableHomeScreen
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CameraScreen(
+                              widget.teacher,
+                              snapshot.data!,
+                              _getCurrentTimeSlotFromTimeTable(snapshot.data!)!,
                             ),
-                            Text(
-                              'Take attendance for your current class',
-                              style: theme.textTheme.bodyText1,
-                              textAlign: TextAlign.left,
-                            ),
-                          ],
+                          ),
+                        );
+
+                        //reload the updated timetable
+                        setState(() {});
+                      },
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Attendance',
+                                style: theme.textTheme.headline5,
+                                textAlign: TextAlign.left,
+                              ),
+                              Text(
+                                'Take attendance for your current class',
+                                style: theme.textTheme.bodyText1,
+                                textAlign: TextAlign.left,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     )
@@ -222,5 +242,36 @@ class _HomeScreeenDashboardState extends State<HomeScreeenDashboard> {
         ),
       ),
     );
+  }
+
+  Map? _getCurrentTimeSlotFromTimeTable(Timetable timetable) {
+    //Get All the classes for today
+    List todaysAgenda = timetable.timetableAgenda![
+        _getWeekDayName(DateTime.now().weekday).toLowerCase()];
+
+    Map? currentTimeSlotFromTimeTable;
+
+    //Get the class going on right now
+    for (var agenda in todaysAgenda) {
+      DateTime from = DateTime(
+          DateTime.now().year,
+          DateTime.now().month,
+          DateTime.now().day,
+          int.parse(agenda['from'].toString().split(':').first),
+          int.parse(agenda['from'].toString().split(':').last));
+      DateTime to = DateTime(
+          DateTime.now().year,
+          DateTime.now().month,
+          DateTime.now().day,
+          int.parse(agenda['to'].toString().split(':').first),
+          int.parse(agenda['to'].toString().split(':').last));
+
+      if (from.isBefore(DateTime.now()) && to.isAfter(DateTime.now())) {
+        //Happening now
+        currentTimeSlotFromTimeTable = agenda;
+      }
+    }
+
+    return currentTimeSlotFromTimeTable;
   }
 }

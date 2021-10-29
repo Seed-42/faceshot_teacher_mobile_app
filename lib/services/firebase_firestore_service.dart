@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:faceshot_teacher/models/attendance.dart';
 import 'package:faceshot_teacher/models/teacher.dart';
 import 'package:faceshot_teacher/models/timetable.dart';
 
@@ -61,5 +62,44 @@ class FirestoreService {
         .collection('Timetables')
         .doc(timeTable.uid)
         .set(timeTable.toMap);
+  }
+
+  /// Gets the Timetable from the [timeTableUid]
+  static Future<List<Attendance>> getAttendance(
+      String timetableUid, String attendanceUid) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('Attendances')
+        .doc(timetableUid)
+        .collection(attendanceUid)
+        .get();
+
+    // Get the First queried result and return
+    final List<Attendance> attendance = [];
+    if (querySnapshot.size > 0) {
+      for (var element in querySnapshot.docs) {
+        if (element.data() != null && element.exists) {
+          attendance.add(Attendance.fromJson(element.data()! as Map));
+        }
+      }
+    }
+
+    return attendance;
+  }
+
+  /// Sets the Attendance from the [attendance]
+  static Future setAttendance(
+    String timeTableUid,
+    String attdanceUid,
+    List<Attendance> attendance,
+  ) async {
+    //Get the user profile data
+    for (Attendance studentAttendance in attendance) {
+      await FirebaseFirestore.instance
+          .collection('Attendances')
+          .doc(timeTableUid)
+          .collection(attdanceUid)
+          .doc(studentAttendance.studentUid)
+          .set(studentAttendance.toMap);
+    }
   }
 }

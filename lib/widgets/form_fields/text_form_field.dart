@@ -6,6 +6,7 @@ class CustomTextFormField extends StatelessWidget {
   final Icon? prefixIcon;
   final FormFieldValidator<String>? validator;
   final bool? obscureText;
+  final TextInputType? textInputType;
 
   const CustomTextFormField({
     required this.controller,
@@ -14,6 +15,7 @@ class CustomTextFormField extends StatelessWidget {
     this.prefixIcon,
     this.validator,
     this.obscureText,
+    this.textInputType,
     Key? key,
   }) : super(key: key);
 
@@ -29,6 +31,7 @@ class CustomTextFormField extends StatelessWidget {
         labelText: labelText,
         prefixIcon: prefixIcon ?? const SizedBox(),
       ),
+      keyboardType: textInputType ?? TextInputType.text,
       obscureText: obscureText ?? false,
       validator: validator,
     );

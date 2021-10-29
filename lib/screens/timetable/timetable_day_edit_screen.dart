@@ -49,6 +49,7 @@ class _TimetableDayEditScreenState extends State<TimetableDayEditScreen> {
                     hintText: 'Fromn Hour',
                     labelText: 'Hour',
                     prefixIcon: const Icon(Icons.email),
+                    textInputType: TextInputType.number,
                     validator: (String? val) {
                       if (val == null || val.isEmpty) {
                         return 'This is a required field';
@@ -68,6 +69,7 @@ class _TimetableDayEditScreenState extends State<TimetableDayEditScreen> {
                     hintText: 'To Minute',
                     labelText: 'Minute',
                     prefixIcon: const Icon(Icons.email),
+                    textInputType: TextInputType.number,
                     validator: (String? val) {
                       if (val == null || val.isEmpty) {
                         return 'This is a required field';
@@ -95,6 +97,7 @@ class _TimetableDayEditScreenState extends State<TimetableDayEditScreen> {
                     hintText: 'To Hour',
                     labelText: 'Hour',
                     prefixIcon: const Icon(Icons.email),
+                    textInputType: TextInputType.number,
                     validator: (String? val) {
                       if (val == null || val.isEmpty) {
                         return 'This is a required field';
@@ -114,6 +117,7 @@ class _TimetableDayEditScreenState extends State<TimetableDayEditScreen> {
                     hintText: 'To Minute',
                     labelText: 'Minute',
                     prefixIcon: const Icon(Icons.email),
+                    textInputType: TextInputType.number,
                     validator: (String? val) {
                       if (val == null || val.isEmpty) {
                         return 'This is a required field';

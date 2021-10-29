@@ -21,6 +21,8 @@ dependencies:
   google_sign_in: ^5.1.1
 
   # Utility
+  camera: ^0.9.4+3
+  path_provider: ^2.0.6
 
 dev_dependencies:
   flutter_test:
