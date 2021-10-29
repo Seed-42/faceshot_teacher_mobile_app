@@ -38,7 +38,7 @@ class _TimeTableHomeScreenState extends State<TimeTableHomeScreen> {
     } else if (index == 4) {
       weekDay = 'Friday';
     } else if (index == 5) {
-      weekDay = 'Saturdayday';
+      weekDay = 'Saturday';
     } else {
       weekDay = 'Sunday';
     }

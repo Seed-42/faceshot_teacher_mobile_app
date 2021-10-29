@@ -1,4 +1,5 @@
 import 'package:faceshot_teacher/models/attendance.dart';
+import 'package:faceshot_teacher/models/student.dart';
 import 'package:faceshot_teacher/models/teacher.dart';
 import 'package:faceshot_teacher/models/timetable.dart';
 import 'package:faceshot_teacher/services/firebase_firestore_service.dart';
@@ -23,7 +24,19 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Attendance for today')),
+      appBar: AppBar(
+        title: const Text('Attendance for today'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.done),
+            onPressed: () {
+              Navigator.of(context).popUntil(
+                ModalRoute.withName("/"),
+              );
+            },
+          )
+        ],
+      ),
       body: FutureBuilder<List<Attendance>>(
         future: _loadAttendanceItems(),
         builder: (context, AsyncSnapshot<List<Attendance>> snapshot) {
@@ -38,7 +51,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             itemCount: snapshot.data?.length,
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
-                title: Text(snapshot.data![index].studentUid),
+                title: getStudentNameText(snapshot.data![index].studentUid),
                 subtitle: Text(
                   'Marked ' +
                       (snapshot.data![index].confidence > 0.9
@@ -78,6 +91,19 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     return await FirestoreService.getAttendance(
       widget.timetable.uid,
       widget.attendanceUid,
+    );
+  }
+
+  FutureBuilder<Student?> getStudentNameText(String studentUid) {
+    return FutureBuilder<Student?>(
+      future: FirestoreService.getStudentProfile(studentUid: studentUid),
+      builder: (BuildContext context, AsyncSnapshot<Student?> snapshot) {
+        if (snapshot.data == null) {
+          return Text(studentUid);
+        } else {
+          return Text(snapshot.data!.name);
+        }
+      },
     );
   }
 }

@@ -11,7 +11,7 @@ class Timetable {
     this.timetableAgenda,
   });
 
-  Timetable.formMap(Map teacherData) {
+  Timetable.fromMap(Map teacherData) {
     uid = teacherData['timetable_uid'];
     authorUid = teacherData['timetable_author_uid'];
 

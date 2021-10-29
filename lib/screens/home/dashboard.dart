@@ -1,5 +1,6 @@
 import 'package:faceshot_teacher/models/teacher.dart';
 import 'package:faceshot_teacher/models/timetable.dart';
+import 'package:faceshot_teacher/screens/attendance/attendance_history_screen.dart';
 import 'package:faceshot_teacher/screens/attendance/camera_screen.dart';
 import 'package:faceshot_teacher/screens/timetable/timetable_home_screen.dart';
 import 'package:faceshot_teacher/services/firebase_firestore_service.dart';
@@ -131,6 +132,46 @@ class _HomeScreeenDashboardState extends State<HomeScreeenDashboard> {
                   ),
                 ),
               ),
+
+              // //Previous Attendances
+              // InkWell(
+              //   onTap: () async {
+              //     //Go to the Attendance acreen
+              //     await Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //         builder: (context) => AttendanceHistoryScreen(
+              //           widget.teacher,
+              //           snapshot.data!,
+              //         ),
+              //       ),
+              //     );
+
+              //     //reload the updated timetable
+              //     setState(() {});
+              //   },
+              //   child: Card(
+              //     child: Padding(
+              //       padding: const EdgeInsets.symmetric(
+              //           horizontal: 12, vertical: 10),
+              //       child: Column(
+              //         crossAxisAlignment: CrossAxisAlignment.start,
+              //         children: [
+              //           Text(
+              //             'Attendance History',
+              //             style: theme.textTheme.headline5,
+              //             textAlign: TextAlign.left,
+              //           ),
+              //           Text(
+              //             'View and update all your past attendances',
+              //             style: theme.textTheme.bodyText1,
+              //             textAlign: TextAlign.left,
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           );
         });

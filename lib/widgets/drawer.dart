@@ -39,7 +39,7 @@ getPrimaryDrawer(BuildContext context, Teacher teacher) {
               context,
               MaterialPageRoute(
                 builder: (context) => const LoginScreen(),
-                settings: const RouteSettings(name: "home_screen"),
+                settings: const RouteSettings(name: 'home_screen'),
               ),
             );
           },

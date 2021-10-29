@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faceshot_teacher/models/attendance.dart';
+import 'package:faceshot_teacher/models/student.dart';
 import 'package:faceshot_teacher/models/teacher.dart';
 import 'package:faceshot_teacher/models/timetable.dart';
 
@@ -16,7 +17,7 @@ class FirestoreService {
     if (queriedProfiles.docs.isNotEmpty && queriedProfiles.docs.first.exists) {
       try {
         Map teacherData = queriedProfiles.docs.first.data() as Map;
-        return Teacher.formMap(teacherData);
+        return Teacher.fromMap(teacherData);
       } catch (_) {
         return null;
       }
@@ -34,6 +35,53 @@ class FirestoreService {
         .set(teacher.toMap);
   }
 
+  /// Gets the student profile from the [studentEmail] or [studentUid]
+  static Future<Student?> getStudentProfile({
+    String? studentEmail,
+    String? studentUid,
+  }) async {
+    if (studentEmail != null) {
+      //Get the user profile data
+      QuerySnapshot queriedProfiles = await FirebaseFirestore.instance
+          .collection('Students')
+          .where('student_email', isEqualTo: studentEmail)
+          .get();
+
+      // Get the First queried result and return
+      if (queriedProfiles.docs.isNotEmpty &&
+          queriedProfiles.docs.first.exists) {
+        try {
+          Map studentData = queriedProfiles.docs.first.data() as Map;
+          return Student.fromMap(studentData);
+        } catch (_) {
+          return null;
+        }
+      } else {
+        return null;
+      }
+    } else if (studentUid != null) {
+      //Get the user profile data
+      DocumentSnapshot studentProfileDocumentSnapshot = await FirebaseFirestore
+          .instance
+          .collection('Students')
+          .doc(studentUid)
+          .get();
+
+      // Get the First queried result and return
+      if (studentProfileDocumentSnapshot.exists) {
+        try {
+          return Student.fromMap(studentProfileDocumentSnapshot.data() as Map);
+        } catch (_) {
+          return null;
+        }
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+
   /// Gets the Timetable from the [timeTableUid]
   static Future<Timetable?> getTimeTable(String timeTableUid) async {
     //Get the user profile data
@@ -46,7 +94,7 @@ class FirestoreService {
     if (documentSnapshot.exists) {
       try {
         Map timeTableData = documentSnapshot.data() as Map;
-        return Timetable.formMap(timeTableData);
+        return Timetable.fromMap(timeTableData);
       } catch (_) {
         return null;
       }
