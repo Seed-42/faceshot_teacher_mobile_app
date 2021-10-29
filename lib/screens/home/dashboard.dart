@@ -1,6 +1,5 @@
 import 'package:faceshot_teacher/models/teacher.dart';
 import 'package:faceshot_teacher/models/timetable.dart';
-import 'package:faceshot_teacher/screens/attendance/attendance_history_screen.dart';
 import 'package:faceshot_teacher/screens/attendance/camera_screen.dart';
 import 'package:faceshot_teacher/screens/timetable/timetable_home_screen.dart';
 import 'package:faceshot_teacher/services/firebase_firestore_service.dart';
