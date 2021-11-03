@@ -19,6 +19,7 @@ class CameraScreen extends StatefulWidget {
   final Teacher teacher;
   final Timetable timetable;
   final Map selectedTimeSlot;
+
   const CameraScreen(this.teacher, this.timetable, this.selectedTimeSlot,
       {Key? key})
       : super(key: key);
@@ -30,6 +31,7 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen> {
   List<CameraDescription> cameras = [];
   bool isLoading = false;
+  String currentProcess = 'Clicking picture from camera';
 
   CameraController? controller;
 
@@ -72,7 +74,14 @@ class _CameraScreenState extends State<CameraScreen> {
             child: Align(
               alignment: Alignment.bottomCenter,
               child: isLoading
-                  ? const CircularProgressIndicator()
+                  ? Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const CircularProgressIndicator(),
+                      const SizedBox(height: 10),
+                      Text(currentProcess),
+                    ],
+                  )
                   : IconButton(
                       icon: const Icon(
                         Icons.camera_rounded,
@@ -132,6 +141,9 @@ class _CameraScreenState extends State<CameraScreen> {
 
   Future _getAttendancePredication(XFile classImage) async {
     //Copy the image file from camera to documents directory
+    setState(() {
+      currentProcess = 'Uploading picture to Cloud';
+    });
     Directory appDocDir = await getApplicationDocumentsDirectory();
     String attendanceUid =
         '${widget.selectedTimeSlot['from']}-${DateTime.now().month}-${DateTime.now().year}';
@@ -153,10 +165,16 @@ class _CameraScreenState extends State<CameraScreen> {
         context,
         'Error uploading the image: ${snapshot.state.toString()}',
       );
+      setState(() {
+        currentProcess = 'Clicking picture from camera';
+      });
       return;
     }
 
     //Get the Attendance from the ML model
+    setState(() {
+      currentProcess = 'Running ML model on the picture';
+    });
     Uint8List uint8List = await classImage.readAsBytes();
     String base64EncodedImage = base64Encode(uint8List);
     List<Attendance> attendances =
@@ -165,6 +183,9 @@ class _CameraScreenState extends State<CameraScreen> {
     );
 
     //Update the Database
+    setState(() {
+      currentProcess = 'Updating database';
+    });
     await FirestoreService.setAttendance(
       widget.timetable.uid,
       attendanceUid,
@@ -178,8 +199,12 @@ class _CameraScreenState extends State<CameraScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AttendanceScreen(widget.teacher, widget.timetable,
-            widget.selectedTimeSlot, attendanceUid,),
+        builder: (context) => AttendanceScreen(
+          widget.teacher,
+          widget.timetable,
+          widget.selectedTimeSlot,
+          attendanceUid,
+        ),
       ),
     );
   }

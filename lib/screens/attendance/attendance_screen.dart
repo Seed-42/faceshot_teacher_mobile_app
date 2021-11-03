@@ -37,9 +37,11 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           IconButton(
             icon: const Icon(Icons.done),
             onPressed: () {
-              Navigator.of(context).popUntil(
-                ModalRoute.withName("/"),
-              );
+              // Navigator.of(context).popUntil(
+              //   ModalRoute.withName("/"),
+              // );
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
             },
           )
         ],
@@ -69,7 +71,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 title: getStudentNameText(snapshot.data![index].studentUid),
                 subtitle: Text(
                   'Marked ' +
-                      (snapshot.data![index].confidence > 0.9
+                      (snapshot.data![index].confidence > 0.5
                           ? 'Present'
                           : 'Absent') +
                       ', with ${snapshot.data![index].confidence * 100}% accuracy',
@@ -77,7 +79,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 trailing: TextButton(
                   child: const Text('Change attendance'),
                   onPressed: () async {
-                    if (snapshot.data![index].confidence > 0.9) {
+                    if (snapshot.data![index].confidence < 0.5) {
                       snapshot.data![index].confidence = 1;
                     } else {
                       snapshot.data![index].confidence = 0;
