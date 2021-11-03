@@ -17,21 +17,22 @@ class AttendancePredictorApiClient {
     //Prepare the body
     Map body = {
       'image': classImage,
-      'total_students': [],
+      //'total_students': [],
     };
 
     //Send the request
     final http_client.Response response = await http_client.post(
       Uri.parse(url),
       headers: <String, String>{'Accept': 'application/json'},
-      body: jsonEncode(body),
+      body: body,
     );
 
     //Handle the result
     final responseData = response.body;
+    
     if (response.statusCode == 200) {
       List<Attendance> markedAttendances = [];
-      List returnedAttendance = jsonDecode(responseData);
+      List returnedAttendance = jsonDecode(responseData)['result'];
       // List returnedAttendance = [
       //   {
       //     "student_id": "N3gAFHY4Cxew1bgXWnVUa2MYPuR2",
@@ -56,7 +57,9 @@ class AttendancePredictorApiClient {
       // ];
 
       for (var attendanceData in returnedAttendance) {
-        markedAttendances.add(Attendance.fromJson(attendanceData));
+        if (attendanceData['student_id'] != 'N/A') {
+           markedAttendances.add(Attendance.fromJson(attendanceData));
+        }
       }
 
       return markedAttendances;

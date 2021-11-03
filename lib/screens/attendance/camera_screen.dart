@@ -179,7 +179,7 @@ class _CameraScreenState extends State<CameraScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => AttendanceScreen(widget.teacher, widget.timetable,
-            widget.selectedTimeSlot, attendanceUid),
+            widget.selectedTimeSlot, attendanceUid,),
       ),
     );
   }

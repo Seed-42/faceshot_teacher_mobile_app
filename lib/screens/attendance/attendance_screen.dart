@@ -51,7 +51,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.data == null || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Not Attdance Data found'));
+            return const Center(child: Text('Not Attendance Data found'));
           }
 
           return ListView.builder(

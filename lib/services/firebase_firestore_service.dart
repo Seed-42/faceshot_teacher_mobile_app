@@ -137,7 +137,7 @@ class FirestoreService {
   /// Sets the Attendance from the [attendance]
   static Future setAttendance(
     String timeTableUid,
-    String attdanceUid,
+    String attendanceUid,
     List<Attendance> attendance,
   ) async {
     //Get the user profile data
@@ -145,7 +145,7 @@ class FirestoreService {
       await FirebaseFirestore.instance
           .collection('Attendances')
           .doc(timeTableUid)
-          .collection(attdanceUid)
+          .collection(attendanceUid)
           .doc(studentAttendance.studentUid)
           .set(studentAttendance.toMap);
     }
