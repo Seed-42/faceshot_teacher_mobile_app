@@ -151,7 +151,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         File('${appDocDir.path}/${widget.attendanceUid}.jpg');
 
     return await loadImage(
-        Uint8List.view(fileAttendanceFinalImage.readAsBytesSync().buffer));
+      Uint8List.view(fileAttendanceFinalImage.readAsBytesSync().buffer),
+    );
   }
 
   Future<ui.Image> loadImage(Uint8List bytes) async {
@@ -163,7 +164,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   }
 
   Future<List<Attendance>> _loadAttendanceItems() async {
-    // Download attdance photo from storage
+    // Download attendance photo from storage
 
     // Return database data
     return await FirestoreService.getAttendance(

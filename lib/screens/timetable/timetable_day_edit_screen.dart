@@ -46,7 +46,7 @@ class _TimetableDayEditScreenState extends State<TimetableDayEditScreen> {
                   flex: 5,
                   child: CustomTextFormField(
                     controller: fromHour,
-                    hintText: 'Fromn Hour',
+                    hintText: 'From Hour',
                     labelText: 'Hour',
                     prefixIcon: const Icon(Icons.email),
                     textInputType: TextInputType.number,

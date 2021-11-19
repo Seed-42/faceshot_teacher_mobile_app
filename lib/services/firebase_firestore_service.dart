@@ -5,6 +5,20 @@ import 'package:faceshot_teacher/models/teacher.dart';
 import 'package:faceshot_teacher/models/timetable.dart';
 
 class FirestoreService {
+  /// Gets the model API endpoint from Firebase database
+  static Future<Map?> getPredictionApiEndpoint() async {
+    //Get the user profile data
+    DocumentSnapshot queriedApiEndpoints = await FirebaseFirestore.instance
+        .collection('Variables').doc('API')
+        .get();
+
+    if (queriedApiEndpoints.exists) {
+        return queriedApiEndpoints.data() as Map;
+    } else {
+      return null;
+    }
+  }
+
   /// Gets the userProfile from the [userEmail]
   static Future<Teacher?> getTeacherProfile(String userEmail) async {
     //Get the user profile data
