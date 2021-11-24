@@ -1,12 +1,15 @@
 class Attendance {
   late String studentUid;
   late double confidence;
-  late Coordinates? coordinates;
+  Coordinates? coordinates;
+  String? studentDetectedFace;
+  late String fileUrl;
 
   Attendance(
     this.studentUid,
     this.confidence,
-    this.coordinates,
+    this.studentDetectedFace,
+    this.fileUrl,
   );
 
   Attendance.fromJson(Map attendanceData) {
@@ -24,12 +27,25 @@ class Attendance {
 
     if (attendanceData
         .containsKey('attendance_student_detected_face_coordinates')) {
-      coordinates = Coordinates.fromJson(
-          attendanceData['attendance_student_detected_face_coordinates']);
+      if (attendanceData['attendance_student_detected_face_coordinates']
+          is String) {
+        studentDetectedFace =
+            attendanceData['attendance_student_detected_face_coordinates'];
+      } else {
+        coordinates =
+            attendanceData['attendance_student_detected_face_coordinates'];
+      }
     } else if (attendanceData
         .containsKey('student_detected_face_coordinates')) {
-      coordinates = Coordinates.fromJson(
-          attendanceData['student_detected_face_coordinates']);
+      if (attendanceData['student_detected_face_coordinates'] is String) {
+        studentDetectedFace =
+            attendanceData['student_detected_face_coordinates'];
+      } else {
+        coordinates = Coordinates.fromJson(
+            attendanceData['student_detected_face_coordinates']);
+      }
+    } else if (attendanceData.containsKey('file_url')) {
+      fileUrl = attendanceData['file_url'];
     }
   }
 
@@ -41,6 +57,11 @@ class Attendance {
     if (coordinates != null) {
       mapToReturn['attendance_student_detected_face_coordinates'] =
           coordinates!.toMap;
+    } else if (studentDetectedFace != null) {
+      mapToReturn['attendance_student_detected_face_coordinates'] =
+          studentDetectedFace;
+    } else if (fileUrl.isNotEmpty) {
+      mapToReturn['file_url'] = fileUrl;
     }
     return mapToReturn;
   }
@@ -48,7 +69,9 @@ class Attendance {
 
 class Coordinates {
   late List topLeft, topRight, bottomLeft, bottomRight;
+
   Coordinates(this.topLeft, this.topRight, this.bottomLeft, this.bottomRight);
+
   Coordinates.fromJson(Map coordinateData) {
     if (coordinateData.containsKey('topleft')) {
       topLeft = coordinateData['topleft'];
@@ -71,6 +94,7 @@ class Coordinates {
       bottomRight = coordinateData['bottom_right'];
     }
   }
+
   Map<String, dynamic> get toMap {
     return {
       'top_left': topLeft,

@@ -204,6 +204,7 @@ class _CameraScreenState extends State<CameraScreen> {
           widget.timetable,
           widget.selectedTimeSlot,
           attendanceUid,
+          attendances,
         ),
       ),
     );
