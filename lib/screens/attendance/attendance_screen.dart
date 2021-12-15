@@ -5,6 +5,7 @@ import 'package:faceshot_teacher/models/student.dart';
 import 'package:faceshot_teacher/models/teacher.dart';
 import 'package:faceshot_teacher/models/timetable.dart';
 import 'package:faceshot_teacher/services/firebase_firestore_service.dart';
+import 'package:faceshot_teacher/widgets/no_cached_image.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 import 'dart:async';
@@ -30,6 +31,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        //leading: Container(),
         title: const Text('Attendance for today'),
         actions: [
           IconButton(
@@ -57,9 +59,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    getStudentNameText(
+
+                    Text(
                       widget.attendances[index].studentUid,
+                      style: Theme.of(context).textTheme.headline4,
                     ),
+                    // getStudentNameText(
+                    //   widget.attendances[index].studentUid,
+                    // ),
                     Text(
                       'Marked ' +
                           (widget.attendances[index].confidence > 0.5
@@ -68,10 +75,12 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                           ', with ${widget.attendances[index].confidence * 100}% accuracy',
                       style: Theme.of(context).textTheme.headline6,
                     ),
-                    Image.network(
+                    NonCacheNetworkImage(
                       showGoogleDriveImage(widget.attendances[index].fileUrl),
-                      height: 100,
                     ),
+                    // Image.network(
+                    //   widget.attendances[index].fileUrl,
+                    // ),
                     TextButton(
                       child: const Text('Change attendance'),
                       onPressed: () async {
