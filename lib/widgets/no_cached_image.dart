@@ -8,7 +8,6 @@ class NonCacheNetworkImage extends StatelessWidget {
   final String imageUrl;
 
   Future<Uint8List> getImageBytes() async {
-    print('Image:\n$imageUrl');
     if (imageUrl.contains('local')) {
       await get(Uri.parse(imageUrl));
     }
