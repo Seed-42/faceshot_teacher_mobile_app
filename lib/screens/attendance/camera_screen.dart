@@ -159,7 +159,7 @@ class _CameraScreenState extends State<CameraScreen> {
             'Attendances/${widget.timetable.uid}/${fileAttendanceFinalImage.uri.pathSegments.last}')
         .putFile(fileAttendanceFinalImage);
     if (snapshot.state == TaskState.success) {
-      final String downloadUrl = await snapshot.ref.getDownloadURL();
+      // final String downloadUrl = await snapshot.ref.getDownloadURL();
 
       //Get the Attendance from the ML model
       setState(() {

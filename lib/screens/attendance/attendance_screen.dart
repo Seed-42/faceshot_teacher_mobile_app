@@ -1,14 +1,14 @@
-import 'dart:typed_data';
+// import 'dart:typed_data';
 
 import 'package:faceshot_teacher/models/attendance.dart';
 import 'package:faceshot_teacher/models/student.dart';
 import 'package:faceshot_teacher/models/teacher.dart';
 import 'package:faceshot_teacher/models/timetable.dart';
 import 'package:faceshot_teacher/services/firebase_firestore_service.dart';
-import 'package:faceshot_teacher/widgets/no_cached_image.dart';
+// import 'package:faceshot_teacher/widgets/no_cached_image.dart';
 import 'package:flutter/material.dart';
-import 'dart:ui' as ui;
-import 'dart:async';
+// import 'dart:ui' as ui;
+// import 'dart:async';
 
 class AttendanceScreen extends StatefulWidget {
   final Teacher teacher;
@@ -49,14 +49,12 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 itemCount: widget.attendances.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
-                    leading: widget.attendances[index].fileUrl != null
-                        ? Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Image.network(
-                              widget.attendances[index].fileUrl,
-                            ),
-                          )
-                        : const SizedBox(),
+                    leading: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image.network(
+                        widget.attendances[index].fileUrl,
+                      ),
+                    ),
                     title: getStudentNameText(
                         widget.attendances[index].studentUid),
                     subtitle: Text(
