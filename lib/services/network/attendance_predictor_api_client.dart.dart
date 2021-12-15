@@ -12,7 +12,7 @@ import '../firebase_firestore_service.dart';
 class AttendancePredictorApiClient {
   ///Get Attendance prediction results
   static Future<List<Attendance>> getAttendancePrediction(
-    String classImage,
+    String imageUrl,
   ) async {
     //Prepare the url
     Map? apiEndpoints = await FirestoreService.getPredictionApiEndpoint();
@@ -23,11 +23,11 @@ class AttendancePredictorApiClient {
 
     //Prepare the body
     Map body = {
-      'image': classImage,
+      'image': imageUrl,
       //'total_students': [],
     };
 
-    // log('Selected image:\n' + classImage);
+    // log('Selected image:\n' + imageUrl);
 
     //Send the request
     final http_client.Response response = await http_client.post(

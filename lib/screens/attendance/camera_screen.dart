@@ -45,7 +45,7 @@ class _CameraScreenState extends State<CameraScreen> {
   Future initializeCameras() async {
     cameras = await availableCameras();
 
-    controller = CameraController(cameras[0], ResolutionPreset.ultraHigh);
+    controller = CameraController(cameras[0], ResolutionPreset.medium);
     controller?.initialize().then((_) {
       if (!mounted) {
         return;
@@ -75,13 +75,13 @@ class _CameraScreenState extends State<CameraScreen> {
               alignment: Alignment.bottomCenter,
               child: isLoading
                   ? Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      const CircularProgressIndicator(),
-                      const SizedBox(height: 10),
-                      Text(currentProcess),
-                    ],
-                  )
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const CircularProgressIndicator(),
+                        const SizedBox(height: 10),
+                        Text(currentProcess),
+                      ],
+                    )
                   : IconButton(
                       icon: const Icon(
                         Icons.camera_rounded,
@@ -159,7 +159,52 @@ class _CameraScreenState extends State<CameraScreen> {
             'Attendances/${widget.timetable.uid}/${fileAttendanceFinalImage.uri.pathSegments.last}')
         .putFile(fileAttendanceFinalImage);
     if (snapshot.state == TaskState.success) {
-      //final String downloadUrl = await snapshot.ref.getDownloadURL();
+      final String downloadUrl = await snapshot.ref.getDownloadURL();
+
+      //Get the Attendance from the ML model
+      setState(() {
+        currentProcess = 'Running ML model on the picture';
+      });
+
+      // Convert the image to base64
+      Uint8List uint8List = await classImage.readAsBytes();
+      String base64EncodedImage = base64Encode(uint8List);
+      List<Attendance> attendances =
+          await AttendancePredictorApiClient.getAttendancePrediction(
+        base64EncodedImage,
+      );
+
+      // List<Attendance> attendances =
+      //     await AttendancePredictorApiClient.getAttendancePrediction(
+      //   downloadUrl,
+      // );
+
+      //Update the Database
+      setState(() {
+        currentProcess = 'Updating database';
+      });
+      await FirestoreService.setAttendance(
+        widget.timetable.uid,
+        attendanceUid,
+        attendances,
+      );
+
+      //Delete the original file
+      fileAttendanceCameraInitialImage.delete();
+
+      //Go to the next screen
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AttendanceScreen(
+            widget.teacher,
+            widget.timetable,
+            widget.selectedTimeSlot,
+            attendanceUid,
+            attendances,
+          ),
+        ),
+      );
     } else {
       Utility.showSnackBar(
         context,
@@ -171,42 +216,12 @@ class _CameraScreenState extends State<CameraScreen> {
       return;
     }
 
-    //Get the Attendance from the ML model
-    setState(() {
-      currentProcess = 'Running ML model on the picture';
-    });
-    Uint8List uint8List = await classImage.readAsBytes();
-    String base64EncodedImage = base64Encode(uint8List);
-    List<Attendance> attendances =
-        await AttendancePredictorApiClient.getAttendancePrediction(
-      base64EncodedImage,
-    );
-
-    //Update the Database
-    setState(() {
-      currentProcess = 'Updating database';
-    });
-    await FirestoreService.setAttendance(
-      widget.timetable.uid,
-      attendanceUid,
-      attendances,
-    );
-
-    //Delete the original file
-    fileAttendanceCameraInitialImage.delete();
-
-    //Go to the next screen
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AttendanceScreen(
-          widget.teacher,
-          widget.timetable,
-          widget.selectedTimeSlot,
-          attendanceUid,
-          attendances,
-        ),
-      ),
-    );
+    // Convert the image to base64
+    // Uint8List uint8List = await classImage.readAsBytes();
+    // String base64EncodedImage = base64Encode(uint8List);
+    // List<Attendance> attendances =
+    //     await AttendancePredictorApiClient.getAttendancePrediction(
+    //   base64EncodedImage,
+    // );
   }
 }

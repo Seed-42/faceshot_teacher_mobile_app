@@ -30,58 +30,43 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        //leading: Container(),
-        title: const Text('Attendance for today'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.done),
-            onPressed: () {
-              // Navigator.of(context).popUntil(
-              //   ModalRoute.withName("/"),
-              // );
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
-            },
-          )
-        ],
-      ),
-      body: widget.attendances.isEmpty
-          ? const Center(child: Text('Not Attendance Data found'))
-          : GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 5.0,
-                mainAxisSpacing: 25.0,
-              ),
-              itemCount: widget.attendances.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-
-                    Text(
-                      widget.attendances[index].studentUid,
-                      style: Theme.of(context).textTheme.headline4,
-                    ),
-                    // getStudentNameText(
-                    //   widget.attendances[index].studentUid,
-                    // ),
-                    Text(
+        appBar: AppBar(
+          //leading: Container(),
+          title: const Text('Attendance for today'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.done),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        ),
+        body: widget.attendances.isEmpty
+            ? const Center(child: Text('Not Attendance Data found'))
+            : ListView.builder(
+                itemCount: widget.attendances.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    leading: widget.attendances[index].fileUrl != null
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.network(
+                              widget.attendances[index].fileUrl,
+                            ),
+                          )
+                        : const SizedBox(),
+                    title: getStudentNameText(
+                        widget.attendances[index].studentUid),
+                    subtitle: Text(
                       'Marked ' +
                           (widget.attendances[index].confidence > 0.5
                               ? 'Present'
                               : 'Absent') +
                           ', with ${widget.attendances[index].confidence * 100}% accuracy',
-                      style: Theme.of(context).textTheme.headline6,
                     ),
-                    NonCacheNetworkImage(
-                      showGoogleDriveImage(widget.attendances[index].fileUrl),
-                    ),
-                    // Image.network(
-                    //   widget.attendances[index].fileUrl,
-                    // ),
-                    TextButton(
+                    trailing: TextButton(
                       child: const Text('Change attendance'),
                       onPressed: () async {
                         if (widget.attendances[index].confidence < 0.5) {
@@ -97,154 +82,130 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
                         setState(() {});
                       },
-                    )
-                  ],
-                );
-              },
-            ),
-      // body: FutureBuilder<List<Attendance>>(
-      //   future: _loadAttendanceItems(),
-      //   builder: (context, AsyncSnapshot<List<Attendance>> snapshot) {
-      //     if (snapshot.connectionState == ConnectionState.waiting) {
-      //       return const Center(child: CircularProgressIndicator());
-      //     }
-      //     if (snapshot.data == null || snapshot.data!.isEmpty) {
-      //       return const Center(child: Text('Not Attendance Data found'));
-      //     }
-      //
-      //     return ListView.builder(
-      //       itemCount: snapshot.data?.length,
-      //       itemBuilder: (BuildContext context, int index) {
-      //         return ListTile(
-      //           leading: snapshot.data![index].studentDetectedFace != null
-      //               ? Padding(
-      //                   padding: const EdgeInsets.all(8.0),
-      //                   child: Image.memory(base64Decode(
-      //                     snapshot.data![index].studentDetectedFace!,
-      //                   )),
-      //                 )
-      //               : snapshot.data![index].coordinates != null
-      //                   ? Padding(
-      //                       padding: const EdgeInsets.all(8.0),
-      //                       child: _getDetectedFaceImage(
-      //                         snapshot.data![index].coordinates,
-      //                       ),
-      //                     )
-      //                   : const SizedBox(),
-      //           title: getStudentNameText(snapshot.data![index].studentUid),
-      //           subtitle: Text(
-      //             'Marked ' +
-      //                 (snapshot.data![index].confidence > 0.5
-      //                     ? 'Present'
-      //                     : 'Absent') +
-      //                 ', with ${snapshot.data![index].confidence * 100}% accuracy',
-      //           ),
-      //           trailing: TextButton(
-      //             child: const Text('Change attendance'),
-      //             onPressed: () async {
-      //               if (snapshot.data![index].confidence < 0.5) {
-      //                 snapshot.data![index].confidence = 1;
-      //               } else {
-      //                 snapshot.data![index].confidence = 0;
-      //               }
-      //               FirestoreService.setAttendance(
-      //                 widget.timetable.uid,
-      //                 widget.attendanceUid,
-      //                 snapshot.data!,
-      //               );
-      //
-      //               setState(() {});
-      //             },
-      //           ),
-      //         );
-      //       },
-      //     );
-      //   },
-      // ),
-    );
+                    ),
+                  );
+                },
+              )
+        // : GridView.builder(
+        //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        //       crossAxisCount: 2,
+        //       crossAxisSpacing: 5.0,
+        //       mainAxisSpacing: 25.0,
+        //     ),
+        //     itemCount: widget.attendances.length,
+        //     itemBuilder: (BuildContext context, int index) {
+        //       return Container(
+        //         width: MediaQuery.of(context).size.width * 0.5,
+        //         height: MediaQuery.of(context).size.width * 0.6,
+        //         padding: const EdgeInsets.all(8.0),
+        //         child: Column(
+        //           crossAxisAlignment: CrossAxisAlignment.start,
+        //           mainAxisAlignment: MainAxisAlignment.start,
+        //           children: [
+        //             Text(
+        //               widget.attendances[index].studentUid,
+        //               style: Theme.of(context).textTheme.headline4,
+        //             ),
+        //             Text(
+        //               'Marked ' +
+        //                   (widget.attendances[index].confidence > 0.5
+        //                       ? 'Present'
+        //                       : 'Absent') +
+        //                   ', with ${widget.attendances[index].confidence * 100}% accuracy',
+        //               style: Theme.of(context).textTheme.headline6,
+        //             ),
+        //             Image.network(
+        //               widget.attendances[index].fileUrl,
+        //               width: MediaQuery.of(context).size.width * 0.5,
+        //               height: MediaQuery.of(context).size.width * 0.5,
+        //             ),
+        //             TextButton(
+        //               child: Text(
+        //                 widget.attendances[index].confidence < 0.5
+        //                     ? 'Mark Present'
+        //                     : 'Mark Absent',
+        //               ),
+        //               onPressed: () async {
+        //                 if (widget.attendances[index].confidence < 0.5) {
+        //                   widget.attendances[index].confidence = 1;
+        //                 } else {
+        //                   widget.attendances[index].confidence = 0;
+        //                 }
+        //                 FirestoreService.setAttendance(
+        //                   widget.timetable.uid,
+        //                   widget.attendanceUid,
+        //                   widget.attendances,
+        //                 );
+
+        //                 setState(() {});
+        //               },
+        //             )
+        //           ],
+        //         ),
+        //       );
+        //     },
+        //   ),
+        // body: FutureBuilder<List<Attendance>>(
+        //   future: _loadAttendanceItems(),
+        //   builder: (context, AsyncSnapshot<List<Attendance>> snapshot) {
+        //     if (snapshot.connectionState == ConnectionState.waiting) {
+        //       return const Center(child: CircularProgressIndicator());
+        //     }
+        //     if (widget.attendances == null || widget.attendances.isEmpty) {
+        //       return const Center(child: Text('Not Attendance Data found'));
+        //     }
+        //
+        //     return ListView.builder(
+        //       itemCount: widget.attendances?.length,
+        //       itemBuilder: (BuildContext context, int index) {
+        //         return ListTile(
+        //           leading: widget.attendances[index].studentDetectedFace != null
+        //               ? Padding(
+        //                   padding: const EdgeInsets.all(8.0),
+        //                   child: Image.memory(base64Decode(
+        //                     widget.attendances[index].studentDetectedFace!,
+        //                   )),
+        //                 )
+        //               : widget.attendances[index].coordinates != null
+        //                   ? Padding(
+        //                       padding: const EdgeInsets.all(8.0),
+        //                       child: _getDetectedFaceImage(
+        //                         widget.attendances[index].coordinates,
+        //                       ),
+        //                     )
+        //                   : const SizedBox(),
+        //           title: getStudentNameText(widget.attendances[index].studentUid),
+        //           subtitle: Text(
+        //             'Marked ' +
+        //                 (widget.attendances[index].confidence > 0.5
+        //                     ? 'Present'
+        //                     : 'Absent') +
+        //                 ', with ${widget.attendances[index].confidence * 100}% accuracy',
+        //           ),
+        //           trailing: TextButton(
+        //             child: const Text('Change attendance'),
+        //             onPressed: () async {
+        //               if (widget.attendances[index].confidence < 0.5) {
+        //                 widget.attendances[index].confidence = 1;
+        //               } else {
+        //                 widget.attendances[index].confidence = 0;
+        //               }
+        //               FirestoreService.setAttendance(
+        //                 widget.timetable.uid,
+        //                 widget.attendanceUid,
+        //                 widget.attendances,
+        //               );
+        //
+        //               setState(() {});
+        //             },
+        //           ),
+        //         );
+        //       },
+        //     );
+        //   },
+        // ),
+        );
   }
-
-  /// Takes the google drive image url and returns a url string which is viewable by Image.network
-  String showGoogleDriveImage(String url) {
-    if (url.contains('http://drive.google.com/uc?export=view&id=')) {
-      return url.replaceAll('http://drive.google.com/uc?export=view&id=',
-          'https://drive.google.com/uc?export=view&id=');
-    } else {
-      return url;
-    }
-  }
-
-  // // Get the detected photo
-  // FutureBuilder _getDetectedFaceImage(Coordinates? coordinates) {
-  //   return FutureBuilder<ui.Image>(
-  //     future: _getClassAttendanceImage(),
-  //     builder: (
-  //       BuildContext context,
-  //       AsyncSnapshot<ui.Image> snapshot,
-  //     ) {
-  //       if (snapshot.data == null) {
-  //         return const SizedBox();
-  //       }
-  //
-  //       //Load picture
-  //       if (coordinates != null) {
-  //         return FittedBox(
-  //           child: SizedBox(
-  //             width: 500,
-  //             height: 500,
-  //             child: CustomPaint(
-  //               painter: SquarePainter(
-  //                 snapshot.data!,
-  //                 //left
-  //                 coordinates.topLeft.first * 0.0,
-  //                 //top
-  //                 coordinates.topLeft.last + 0.0,
-  //                 //width
-  //                 coordinates.bottomRight.first -
-  //                     coordinates.bottomLeft.first +
-  //                     0.0,
-  //                 //height
-  //                 coordinates.bottomRight.last -
-  //                     coordinates.topRight.last +
-  //                     0.0,
-  //               ),
-  //             ),
-  //           ),
-  //         );
-  //       } else {
-  //         return const SizedBox();
-  //       }
-  //     },
-  //   );
-  // }
-
-  // Future<ui.Image> _getClassAttendanceImage() async {
-  //   final Directory appDocDir = await getApplicationDocumentsDirectory();
-  //   final fileAttendanceFinalImage =
-  //       File('${appDocDir.path}/${widget.attendanceUid}.jpg');
-  //
-  //   return await loadImage(
-  //     Uint8List.view(fileAttendanceFinalImage.readAsBytesSync().buffer),
-  //   );
-  // }
-
-  Future<ui.Image> loadImage(Uint8List bytes) async {
-    final Completer<ui.Image> completer = Completer();
-    ui.decodeImageFromList(bytes, (ui.Image img) {
-      return completer.complete(img);
-    });
-    return completer.future;
-  }
-
-  // Future<List<Attendance>> _loadAttendanceItems() async {
-  //   // Download attendance photo from storage
-  //
-  //   // Return database data
-  //   return await FirestoreService.getAttendance(
-  //     widget.timetable.uid,
-  //     widget.attendanceUid,
-  //   );
-  // }
 
   FutureBuilder<Student?> getStudentNameText(String studentUid) {
     return FutureBuilder<Student?>(
