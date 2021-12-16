@@ -6,6 +6,7 @@ class AppTheme {
       primarySwatch: Colors.blue,
       brightness: Brightness.dark,
       canvasColor: Colors.transparent,
+      scaffoldBackgroundColor: Colors.black,
 
       //Icon Theme
       //iconTheme: const IconThemeData(color: Color(0xff45d8b0)),

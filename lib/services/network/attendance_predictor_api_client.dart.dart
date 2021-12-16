@@ -23,7 +23,7 @@ class AttendancePredictorApiClient {
 
     //Prepare the body
     Map body = {
-      'image': imageUrl,
+      'url': imageUrl,
       //'total_students': [],
     };
 

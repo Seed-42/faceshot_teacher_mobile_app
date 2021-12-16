@@ -22,6 +22,7 @@ dependencies:
 
   # Utility
   camera: ^0.9.4+3
+  image_picker: ^0.8.4+4
   path_provider: ^2.0.6
 
 dev_dependencies:
