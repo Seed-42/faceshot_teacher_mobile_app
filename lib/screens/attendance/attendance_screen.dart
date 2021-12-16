@@ -1,5 +1,3 @@
-// import 'dart:typed_data';
-
 import 'package:faceshot_teacher/models/attendance.dart';
 import 'package:faceshot_teacher/models/student.dart';
 import 'package:faceshot_teacher/models/teacher.dart';
@@ -7,8 +5,6 @@ import 'package:faceshot_teacher/models/timetable.dart';
 import 'package:faceshot_teacher/services/firebase_firestore_service.dart';
 // import 'package:faceshot_teacher/widgets/no_cached_image.dart';
 import 'package:flutter/material.dart';
-// import 'dart:ui' as ui;
-// import 'dart:async';
 
 class AttendanceScreen extends StatefulWidget {
   final Teacher teacher;

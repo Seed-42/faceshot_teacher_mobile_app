@@ -45,7 +45,7 @@ class _CameraScreenState extends State<CameraScreen> {
   Future initializeCameras() async {
     cameras = await availableCameras();
 
-    controller = CameraController(cameras[0], ResolutionPreset.medium);
+    controller = CameraController(cameras[0], ResolutionPreset.ultraHigh);
     controller?.initialize().then((_) {
       if (!mounted) {
         return;
@@ -199,14 +199,15 @@ class _CameraScreenState extends State<CameraScreen> {
     late TaskSnapshot snapshot;
     if (kIsWeb) {
       //path to save Storage
-      fileAttendanceFinalImage = File('temp/$attendanceUid.jpg');
+      fileAttendanceFinalImage = File('$attendanceUid.jpg');
 
       //Upload this image to Firebase Storage
       snapshot = await FirebaseStorage.instance
-          .refFromURL('urlFromStorage')
+          .ref()
           .child(
-              'Attendances/${widget.timetable.uid}/${fileAttendanceFinalImage.uri.pathSegments.last}')
-          .putFile(fileAttendanceFinalImage);
+              'Attendances/${widget.timetable.uid}/${fileAttendanceFinalImage.uri.pathSegments.last}',
+      )
+          .putData(await classImage.readAsBytes());
     } else {
       Directory appDocDir = await getApplicationDocumentsDirectory();
       fileAttendanceFinalImage = File('${appDocDir.path}/$attendanceUid.jpg');
@@ -254,7 +255,7 @@ class _CameraScreenState extends State<CameraScreen> {
       );
 
       //Delete the original file
-      if (fileAttendanceCameraInitialImage != null) {
+      if (!kIsWeb && fileAttendanceCameraInitialImage != null) {
         fileAttendanceCameraInitialImage.delete();
       }
 
